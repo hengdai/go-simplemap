@@ -14,7 +14,8 @@ func main() {
 	testMap, err := simplemap.NewMap(data)
 	if nil != err {
 		fmt.Println(err.Error())
+		return
 	}
 
-	fmt.Println(testMap)
+	fmt.Println(testMap.ExistKey("name"))
 }
