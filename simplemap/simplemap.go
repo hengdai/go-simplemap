@@ -33,7 +33,7 @@ func NewMap(v interface{}) (*simpleMap, error) {
 		return &data, nil
 	}
 
-	panic("NewMap need json string or map")
+	panic("NewMap need json string or map[string]interface")
 }
 
 // 判断map是否存在key
