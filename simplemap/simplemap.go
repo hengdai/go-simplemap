@@ -2,6 +2,7 @@ package simplemap
 
 import (
 	"encoding/json"
+	"errors"
 	"reflect"
 )
 
@@ -32,7 +33,7 @@ func NewMap(v interface{}) (*simpleMap, error) {
 		return &data, nil
 	}
 
-	panic("NewMap 入参json字符串或者map")
+	panic("NewMap need json string or map")
 }
 
 // 判断map是否存在key
@@ -42,4 +43,62 @@ func (m *simpleMap) ExistKey(key string) bool {
 	}
 
 	return false
+}
+
+// 新增或者更改map key对应的value
+func (m *simpleMap) SetItem(key string, value interface{}) error {
+	item, ok := m.data.(map[string]interface{})
+	if !ok {
+		err :=  errors.New("invalid map")
+		return err
+	}
+	item[key] = value
+	m.data = item
+
+	return nil
+}
+
+// 删除key所对应的那一条item，如果key不存在，不做任何操作
+func (m *simpleMap) DelItem(key string) error {
+	item, ok := m.data.(map[string]interface{})
+	if !ok {
+		err :=  errors.New("invalid map")
+		return err
+	}
+	delete(item, key)
+	m.data = item
+
+	return nil
+}
+
+// 返回item对应的所有key
+func (m *simpleMap) Keys() ([]interface{}, error) {
+	item, ok := m.data.(map[string]interface{})
+	if !ok {
+		err :=  errors.New("invalid map")
+		return nil, err
+	}
+
+	var keys []interface{}
+	for key := range item {
+		keys = append(keys, key)
+	}
+
+	return keys, nil
+}
+
+// 返回item对应的所有value
+func (m *simpleMap) Values() ([]interface{}, error) {
+	item, ok := m.data.(map[string]interface{})
+	if !ok {
+		err :=  errors.New("invalid map")
+		return nil, err
+	}
+
+	var values []interface{}
+	for _, value := range item {
+		values = append(values, value)
+	}
+
+	return values, nil
 }

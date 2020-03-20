@@ -17,5 +17,6 @@ func main() {
 		return
 	}
 
-	fmt.Println(testMap.ExistKey("name"))
+	keys, _ := testMap.Values()
+	fmt.Println(keys)
 }
