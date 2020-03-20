@@ -16,7 +16,6 @@ func main() {
 		fmt.Println(err.Error())
 		return
 	}
-
-	keys, _ := testMap.Values()
-	fmt.Println(keys)
+	 jsonStr, err := testMap.JsonStr()
+	fmt.Println(jsonStr)
 }

@@ -102,3 +102,13 @@ func (m *simpleMap) Values() ([]interface{}, error) {
 
 	return values, nil
 }
+
+// map转换为json字符串
+func (m *simpleMap) JsonStr() (string, error) {
+	jsonRes, err := json.Marshal(m.data)
+	if nil != err {
+		return "", err
+	}
+
+	return string(jsonRes), nil
+}
