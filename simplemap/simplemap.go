@@ -36,6 +36,15 @@ func NewMap(v interface{}) (*simpleMap, error) {
 	panic("NewMap need json string or map[string]interface")
 }
 
+// 返回map类型的数据
+func (m *simpleMap) GetMap() (map[string]interface{}, error) {
+	if item, ok := m.data.(map[string]interface{}); ok {
+		return item, nil
+	}
+
+	return nil, errors.New("invalid map")
+}
+
 // 判断map是否存在key
 func (m *simpleMap) ExistKey(key string) bool {
 	if _, ok := m.data.(map[string]interface{})[key]; ok {
