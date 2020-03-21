@@ -16,6 +16,6 @@ func main() {
 		fmt.Println(err.Error())
 		return
 	}
-	 jsonStr, err := testMap.JsonStr()
-	fmt.Println(jsonStr)
+	 simpleMap, err := testMap.GetMap()
+	fmt.Println(simpleMap)
 }
