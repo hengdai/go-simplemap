@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"reflect"
+	"strings"
 )
 
 type simpleMap struct {
@@ -12,7 +13,7 @@ type simpleMap struct {
 
 // return the current version
 func Version() string {
-	return "0.0.1"
+	return "0.0.3"
 }
 
 // 初始化map，入参支持字符串json和map，且key只能是string类型
@@ -65,6 +66,35 @@ func (m *simpleMap) SetItem(key string, value interface{}) error {
 	m.data = item
 
 	return nil
+}
+
+// 根据key获取对应的value，支持多层获取，例如a.b.c.d
+func (m *simpleMap) GetItem(keyStr string) (string, error) {
+	keyList := strings.Split(keyStr, ".")
+	data := m.data
+	length := len(keyList)
+
+	for i, key := range keyList {
+		_, ok := data.(map[string]interface{})
+		if !ok {
+			return "", errors.New("invalid map")
+		}
+
+		if value, ok := data.(map[string]interface{})[key]; ok {
+			if length-1 == i {
+				str, err := json.Marshal(value)
+				if err != nil {
+					return "", err
+				}
+				return string(str), nil
+			}
+			data = value
+		} else {
+			return "", errors.New("key '" + keyStr + "' not exist")
+		}
+	}
+
+	return "", errors.New("key '" + keyStr + "' not exist")
 }
 
 // 删除key所对应的那一条item，如果key不存在，不做任何操作
