@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -75,22 +76,41 @@ func (m *simpleMap) GetItem(keyStr string) (string, error) {
 	length := len(keyList)
 
 	for i, key := range keyList {
-		_, ok := data.(map[string]interface{})
-		if !ok {
+		_, isMap := data.(map[string]interface{})
+		_, isArray := data.([]interface{})
+		if !isMap && !isArray{
 			return "", errors.New("invalid map")
 		}
 
-		if value, ok := data.(map[string]interface{})[key]; ok {
-			if length-1 == i {
-				str, err := json.Marshal(value)
-				if err != nil {
-					return "", err
+		if isMap {
+			if value, ok := data.(map[string]interface{})[key]; ok {
+				if length-1 == i {
+					str, err := json.Marshal(value)
+					if err != nil {
+						return "", err
+					}
+					return string(str), nil
 				}
-				return string(str), nil
+				data = value
 			}
-			data = value
-		} else {
-			return "", errors.New("key '" + keyStr + "' not exist")
+		}
+
+		if isArray {
+			interKey, err := strconv.Atoi(key)
+			if arr, ok := data.([]interface{}); ok && err == nil {
+				if len(arr) < interKey + 1 {
+					return "", errors.New("index out of range [" + key +"] with length " + strconv.Itoa(len(arr)))
+				}
+				value := arr[interKey]
+				if length-1 == i {
+					str, err := json.Marshal(value)
+					if err != nil {
+						return "", err
+					}
+					return string(str), nil
+				}
+				data = value
+			}
 		}
 	}
 
