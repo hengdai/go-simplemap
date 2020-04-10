@@ -69,7 +69,7 @@ func (m *simpleMap) SetItem(key string, value interface{}) error {
 	return nil
 }
 
-// 根据key获取对应的value，支持多层获取，例如a.b.c.d
+// 根据key获取对应的value，支持多层获取，例如a.b.c.d，支持数组索引，例如：a.0.b
 func (m *simpleMap) GetItem(keyStr string) (string, error) {
 	keyList := strings.Split(keyStr, ".")
 	data := m.data

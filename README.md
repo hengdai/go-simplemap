@@ -49,6 +49,11 @@ func (m *simpleMap) SetItem(key string, value interface{}) error
 ```
 
 ```
+// 根据key获取对应的value，支持多层获取，例如a.b.c.d，支持数组索引，例如：a.0.b
+func (m *simpleMap) GetItem(keyStr string) (string, error)
+```
+
+```
 // 删除key所对应的那一条item，如果key不存在，不做任何操作
 func (m *simpleMap) DelItem(key string) error
 ```
