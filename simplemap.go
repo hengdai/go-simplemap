@@ -56,7 +56,7 @@ func (m *simpleMap) ExistKey(key string) bool {
 	return false
 }
 
-// 新增或者更改map key对应的value
+// 新增或者更改map key对应的value，只支持一层嵌套
 func (m *simpleMap) SetItem(key string, value interface{}) error {
 	item, ok := m.data.(map[string]interface{})
 	if !ok {
@@ -117,7 +117,7 @@ func (m *simpleMap) GetItem(keyStr string) (string, error) {
 	return "", errors.New("key '" + keyStr + "' not exist")
 }
 
-// 删除key所对应的那一条item，如果key不存在，不做任何操作
+// 删除key所对应的那一条item，如果key不存在，不做任何操作。只支持一层嵌套
 func (m *simpleMap) DelItem(key string) error {
 	item, ok := m.data.(map[string]interface{})
 	if !ok {
