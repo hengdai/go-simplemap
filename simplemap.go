@@ -14,7 +14,7 @@ type simpleMap struct {
 
 // return the current version
 func Version() string {
-	return "0.0.3"
+	return "0.0.4"
 }
 
 // 初始化map，入参支持字符串json和map，且key只能是string类型
@@ -48,12 +48,43 @@ func (m *simpleMap) GetMap() (map[string]interface{}, error) {
 }
 
 // 判断map是否存在key
-func (m *simpleMap) ExistKey(key string) bool {
-	if _, ok := m.data.(map[string]interface{})[key]; ok {
-		return true
+func (m *simpleMap) ExistKey(keyStr string) (bool, error) {
+	keyList := strings.Split(keyStr, ".")
+	data := m.data
+	length := len(keyList)
+
+	for i, key := range keyList {
+		_, isMap := data.(map[string]interface{})
+		_, isArray := data.([]interface{})
+		if !isMap && !isArray{
+			return false, errors.New("invalid map")
+		}
+
+		if isMap {
+			if value, ok := data.(map[string]interface{})[key]; ok {
+				if length-1 == i {
+					return true, nil
+				}
+				data = value
+			}
+		}
+
+		if isArray {
+			interKey, err := strconv.Atoi(key)
+			if arr, ok := data.([]interface{}); ok && err == nil {
+				if len(arr) < interKey + 1 {
+					return false, errors.New("index out of range [" + key +"] with length " + strconv.Itoa(len(arr)))
+				}
+				value := arr[interKey]
+				if length-1 == i {
+					return true, nil
+				}
+				data = value
+			}
+		}
 	}
 
-	return false
+	return false, errors.New("key '" + keyStr + "' not exist")
 }
 
 // 新增或者更改map key对应的value，只支持一层嵌套
