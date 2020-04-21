@@ -7,29 +7,81 @@
 package main
 
 import (
-    "fmt"
-    "go-simplemap/simplemap"
+	"fmt"
+	"go-simplemap/simplemap"
 )
 
 func main() {
-    data := `{
-        "name": "daiheng",
-        "age": "25"
-        }`
-    
-    testMap, err := simplemap.NewMap(data)
-    if nil != err {
-        fmt.Println(err.Error())
-        return
-    }
-    simpleMap, _ := testMap.GetMap()
-    fmt.Println(simpleMap)
+	jsonStr := `
+{
+  "status": 0,
+  "message": "",
+  "data": {
+    "search_data": [
+      {
+        "elements": [
+          {
+            "rating": 0,
+            "name": "奈良市",
+            "url": "/scenic/3/10052/",
+            "wish_to_go_count": 328,
+            "name_orig": "奈良市",
+            "visited_count": 1958,
+            "comments_count": 0,
+            "location": {
+              "lat": 34.685087,
+              "lng": 135.805
+            },
+            "has_experience": false,
+            "rating_users": 0,
+            "name_zh": "奈良市",
+            "name_en": "Nara",
+            "type": 3,
+            "id": 10052,
+            "has_route_maps": false,
+            "icon": "http://media.breadtrip.com/images/icons/2/city.png"
+          },
+          {
+            "rating": 0,
+            "name": "小樽市",
+            "url": "/scenic/3/26772/",
+            "wish_to_go_count": 266,
+            "name_orig": "小樽市",
+            "visited_count": 954,
+            "comments_count": 0,
+            "location": {
+              "lat": 43.190717,
+              "lng": 140.994662
+            },
+            "has_experience": false,
+            "rating_users": 0,
+            "name_zh": "小樽市",
+            "name_en": "Otaru",
+            "type": 3,
+            "id": 26772,
+            "has_route_maps": false,
+            "icon": "http://media.breadtrip.com/images/icons/2/city.png"
+          }
+        ]
+      }
+    ]
+  }
+}
+`
+	smap, err := simplemap.NewMap(jsonStr)
+	if err != nil {
+	    panic(err.Error())
+	}
+
+	s, err := smap.GetItem("data.search_data.0.elements.1.location")
+	fmt.Println(s, err)
+}
 }
 ```
 输出
 
 ```
-map[age:25 name:daiheng]
+{"lat":43.190717,"lng":140.994662} <nil>
 ```
 
 所有方法如下：
