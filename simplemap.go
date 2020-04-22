@@ -14,7 +14,7 @@ type simpleMap struct {
 
 // return the current version
 func Version() string {
-	return "0.0.4"
+	return "0.0.5"
 }
 
 // 初始化map，入参支持字符串json和map，且key只能是string类型
@@ -201,4 +201,78 @@ func (m *simpleMap) JsonStr() (string, error) {
 	}
 
 	return string(jsonRes), nil
+}
+
+// 返回第一层级的数据keys的长度，如果
+func (m *simpleMap) Length() int {
+	keys, err := m.Keys()
+	if nil != err {
+		return 0
+	}
+
+	return len(keys)
+}
+
+// 获取key对应的value的长度
+// 如果value是map则返回map的keys的长度，
+// 如果是list，则直接返回长度
+// 如果是string，则返回string的长度
+func (m *simpleMap) ValueLength(keyStr string) int {
+	values, err := m.GetItem(keyStr)
+	if nil != err {
+		return 0
+	}
+
+	var valMap map[string]interface{}
+	var valList []interface{}
+	isMap := json.Unmarshal([]byte(values), &valMap)
+	isArray := json.Unmarshal([]byte(values), &valList)
+
+	if nil == isMap {
+		length := 0
+		for _, _ = range valMap {
+			length++
+		}
+		return length
+	}
+
+	if nil == isArray {
+		return len(valList)
+	}
+
+	return len(values)
+}
+
+// 判断key对应的value是不是map
+func (m *simpleMap) IsValueMap(keyStr string) bool {
+	values, err := m.GetItem(keyStr)
+	if nil != err {
+		return false
+	}
+
+	var valMap map[string]interface{}
+	isMap := json.Unmarshal([]byte(values), &valMap)
+
+	if nil != isMap {
+		return false
+	}
+
+	return true
+}
+
+// 判断key对应的value是不是array
+func (m *simpleMap) IsValueArr(keyStr string) bool {
+	values, err := m.GetItem(keyStr)
+	if nil != err {
+		return false
+	}
+
+	var valList []interface{}
+	isArray := json.Unmarshal([]byte(values), &valList)
+
+	if nil != isArray {
+		return false
+	}
+
+	return true
 }
