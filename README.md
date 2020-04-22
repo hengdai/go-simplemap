@@ -7,8 +7,8 @@
 package main
 
 import (
-	"fmt"
-	"go-simplemap/simplemap"
+    "fmt"
+    "go-simplemap/simplemap"
 )
 
 func main() {
@@ -68,14 +68,13 @@ func main() {
   }
 }
 `
-	smap, err := simplemap.NewMap(jsonStr)
-	if err != nil {
-	    panic(err.Error())
-	}
-
-	s, err := smap.GetItem("data.search_data.0.elements.1.location")
-	fmt.Println(s, err)
-}
+    smap, err := simplemap.NewMap(jsonStr)
+    if err != nil {
+        panic(err.Error())
+    }
+    
+    s, err := smap.GetItem("data.search_data.0.elements.1.location")
+    fmt.Println(s, err)
 }
 ```
 输出
