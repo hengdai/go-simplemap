@@ -125,3 +125,25 @@ func (m *simpleMap) Values() ([]interface{}, error)
 func (m *simpleMap) JsonStr() (string, error)
 ```
 
+```
+// 返回第一层级的数据keys的长度，如果
+func (m *simpleMap) Length() int
+```
+
+```
+// 获取key对应的value的长度
+// 如果value是map则返回map的keys的长度，
+// 如果是list，则直接返回长度
+// 如果是string，则返回string的长度
+func (m *simpleMap) ValueLength(keyStr string) int
+```
+
+```
+// 判断key对应的value是不是map
+func (m *simpleMap) IsValueMap(keyStr string) bool
+```
+
+```
+// 判断key对应的value是不是array
+func (m *simpleMap) IsValueArr(keyStr string) bool
+```
