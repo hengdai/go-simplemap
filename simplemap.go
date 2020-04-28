@@ -13,8 +13,8 @@ type simpleMap struct {
 }
 
 // return the current version
-func Version() string {
-	return "0.0.5"
+func (m *simpleMap) Version() string {
+	return "0.0.6"
 }
 
 // 初始化map，入参支持字符串json和map，且key只能是string类型
@@ -230,7 +230,7 @@ func (m *simpleMap) ValueLength(keyStr string) int {
 
 	if nil == isMap {
 		length := 0
-		for _, _ = range valMap {
+		for range valMap {
 			length++
 		}
 		return length
